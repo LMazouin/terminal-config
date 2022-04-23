@@ -8,28 +8,24 @@ filetype plugin indent off
 
 call plug#begin('~/.vim/bundles')
 
-Plug 'scrooloose/nerdtree'
+Plug 'preservim/nerdtree'
 Plug 'ryanoasis/vim-devicons'
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
-Plug 'Xuyuanp/nerdtree-git-plugin'
-
-Plug 'tomasiser/vim-code-dark'
-" Plug 'morhetz/gruvbox'
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-
-Plug 'yuezk/vim-js'
-Plug 'maxmellon/vim-jsx-pretty'
 
 Plug 'ap/vim-css-color'
 
 Plug 'jiangmiao/auto-pairs'
-
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 
-" Plug 'sheerun/vim-polyglot'
-Plug 'vim-python/python-syntax'
+Plug 'sheerun/vim-polyglot'
+
+Plug 'itchyny/lightline.vim'
+Plug 'yardnsm/vim-import-cost'
+
+Plug 'morhetz/gruvbox'
 
 call plug#end()
 
@@ -44,9 +40,21 @@ set ruler
 set hlsearch
 set splitbelow
 set splitright
-set cmdheight=1
 set signcolumn=yes
-" set completeopt=noinsert,menuone,noselect
+
+set hidden
+
+set nobackup
+set nowritebackup
+
+set cmdheight=2
+
+set updatetime=300
+
+set shortmess+=c
+
+set completeopt=longest,menuone
+
 let maplocalleader = "//"
 let mapleader = "//"
 
@@ -55,12 +63,9 @@ set backspace=indent,eol,start
 
 " 8-bit color scheme
 set t_Co=256
-colorscheme codedark
-" colorscheme gruvbox
-
+colorscheme gruvbox
 
 let g:python_highlight_all = 1
-
 
 nnoremap <nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
 nnoremap <nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
@@ -71,17 +76,7 @@ inoremap <nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(
 " INDENTATION
 " ===========
 
-autocmd BufNewFile,BufRead *.html,*.css,*.php
-    \ setlocal tabstop=4 |
-    \ setlocal softtabstop=4 |
-    \ setlocal shiftwidth=4 |
-    \ setlocal textwidth=200 |
-    \ setlocal expandtab |
-    \ setlocal autoindent |
-    \ setlocal smartindent |
-    \ setlocal fileformat=unix
-
-autocmd BufNewFile,BufRead *.js,*.json,*.jsx,*.py,*.twig,*.bib,*.tex
+autocmd BufNewFile,BufRead *.html,*.css,*.php*,.js,*.json,*.jsx,*.py,*.twig,*.bib,*.tex,*.c,*.h
     \ setlocal tabstop=4 |
     \ setlocal softtabstop=4 |
     \ setlocal shiftwidth=4 |
@@ -93,14 +88,10 @@ autocmd BufNewFile,BufRead *.js,*.json,*.jsx,*.py,*.twig,*.bib,*.tex
 
 
 " =========
-" POWERLINE
+" LIGHTLINE
 " =========
 
-python3 from powerline.vim import setup as powerline_setup
-python3 powerline_setup()
-python3 del powerline_setup
-
-set rtp+=/User/lmazouin/Library/Python/3.9/lib/python/site–packages/powerline/bindings/vim
+let g:lightline={'colorscheme':'gruvbox'}
 set laststatus=2
 set noshowmode
 
@@ -112,13 +103,8 @@ nnoremap <C-t> :NERDTreeToggle<CR>
 
 let g:NERDTreeShowHidden = 1
 let g:NERDTreeMinmalUI = 1
-let g:NERDTreeStatusLine = ''
 
 let NERDTreeIgnore = ['\.swp', '__pycache__']
-
-" Start NERDTree when Vim is started without file arguments.
-autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 0 && !exists('s:std_in') | NERDTree | endif
 
 " Exit Vim if NERDTree is the only window remaining in the only tab.
 autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
@@ -129,31 +115,21 @@ autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTa
 " Open the existing NERDTree on each new tab.
 autocmd BufWinEnter * if getcmdwintype() == '' | silent NERDTreeMirror | endif
 
-" Open the existing NERDTree on each new tab.
-autocmd BufWinEnter * if getcmdwintype() == '' | silent NERDTreeMirror | endif
-
 let g:NERDTreeLimitedSyntax = 1
 let g:NERDTreeFileExtensionHighlightFullName = 1
 let g:NERDTreeExactMatchHighlightFullName = 1
 let g:NERDTreePatternMatchHighlightFullName = 1
 
-let g:NERDTreeGitStatusIndicatorMapCustom = {
-                \ 'Modified'  :'✹',
-                \ 'Staged'    :'✚',
-                \ 'Untracked' :'✭',
-                \ 'Renamed'   :'➜',
-                \ 'Unmerged'  :'═',
-                \ 'Deleted'   :'✖',
-                \ 'Dirty'     :'✗',
-                \ 'Ignored'   :'☒',
-                \ 'Clean'     :'✔︎',
-                \ 'Unknown'   :'?',
-                \ }
-
-let g:NERDTreeGitStatusUseNerdFonts = 1
-let g:NERDTreeGitStatusShowIgnored = 0
-
 let g:cssColorVimDoNotMessMyUpdatetime = 1
+
+" =======
+" FOLDING
+" =======
+
+set foldmethod=syntax "syntax highlighting items specify folds  
+set foldcolumn=1 "defines 1 col at window left, to indicate folding  
+let javaScript_fold=1 "activate folding by JS syntax  
+set foldlevelstart=99 "start file with all folds opened
 
 " =======
 " FORTRAN
@@ -171,9 +147,9 @@ au BufNewFile,BufRead *.f
 " indentation fortran90/95
 au BufNewFile,BufRead *.f90
 \ set expandtab |
-\ set tabstop=4 |
-\ set shiftwidth=4 |
-\ set softtabstop=4 |
+\ set tabstop=2 |
+\ set shiftwidth=2 |
+\ set softtabstop=2 |
 \ set smartindent |
 \ set textwidth=72 |
 \ set fileformat=unix
@@ -196,4 +172,23 @@ else
   	unlet! fortran_free_source
 endif
 
-au BufNewFile,BufRead *.html set filetype=htmldjango
+" ======
+" PASCAL
+" ======
+
+autocmd BufNewFile,BufRead *.pas,*.pp
+    \ setlocal tabstop=2 |
+    \ setlocal softtabstop=2 |
+    \ setlocal shiftwidth=2 |
+    \ setlocal textwidth=120 |
+    \ setlocal expandtab |
+    \ setlocal smartindent |
+    \ setlocal fileformat=unix
+
+let pascal_fpc=1
+let pascal_delphi=1
+let pascal_symbol_operator=1
+let pascal_no_tabs=1
+
+
+au BufNewFile,BufRead *.jsonc set filetype=json
