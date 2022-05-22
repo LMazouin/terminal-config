@@ -1,0 +1,17 @@
+{
+  "diagnostic.infoSign": "I",
+  "diagnostic.hintSign": "H",
+  "diagnostic.errorSign": "X",
+  "diagnostic.warningSign": "!",
+  "coc.preferences.willSaveHandlerTimeout": 1000,
+  "html.filetypes": ["html", "htmldjango", "php"],
+  "python.linting.flake8Path": "/usr/local/bin/flake8",
+  "python.linting.flake8Enabled": true,
+  "python.linting.flake8Args": ["max-line-length=120"],
+  "python.formatting.provider": "black",
+  "python.formatting.blackPath": "/usr/local/bin/black",
+  "python.formatting.blackArgs": ["--line-length=120"],
+  "javascript.suggestionActions.enabled": true,
+  "snippets.extends": { "typescriptreact": ["typescript"] },
+  "emmet.includeLanguages": { "javascript": "javascriptreact", "htmldjango": "html" }
+}
